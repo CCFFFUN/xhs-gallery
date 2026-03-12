@@ -2,8 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小红书猫箱捏崽关键词画册</title>
+    <title>小红书猫箱捏崽关键词画册 v2</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff; }
@@ -24,7 +27,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🐸 小红书猫箱捏崽关键词画册</h1>
+        <h1>🐸 小红书猫箱捏崽关键词画册 v2</h1>
     </div>
     <div class="gallery" id="gallery"></div>
     <script>
@@ -48,12 +51,17 @@
         "collects": 74,
         "images": ["img2_1.jpg","img2_2.jpg","img2_3.jpg","img2_4.jpg","img2_5.jpg"]
     }];
-    document.getElementById('gallery').innerHTML = data.map(item => 
-        '<div class="card"><div class="card-images">'+
-        item.images.map(img=>`<img src="${base}${img}">`).join('')+
-        '</div><div class="card-content"><div class="card-title">'+item.title+'</div><div class="card-author">👤 '+item.author+' · '+item.time+'</div><div class="card-tags">'+
-        item.tags.map(t=>`<span class="tag">${t}</span>`).join('')+'</div><div class="card-stats"><div class="stat">👍 <span>'+item.likes+'</span></div><div class="stat">⭐ <span>'+item.collects+'</span></div></div></div></div>'
-    ).join('');
+    
+    function render() {
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = data.map(item => 
+            '<div class="card"><div class="card-images">'+
+            item.images.map(img=>`<img src="${base}${img}">`).join('')+
+            '</div><div class="card-content"><div class="card-title">'+item.title+'</div><div class="card-author">👤 '+item.author+' · '+item.time+'</div><div class="card-tags">'+
+            item.tags.map(t=>`<span class="tag">${t}</span>`).join('')+'</div><div class="card-stats"><div class="stat">👍 <span>'+item.likes+'</span></div><div class="stat">⭐ <span>'+item.collects+'</span></div></div></div></div>'
+        ).join('');
+    }
+    render();
     </script>
 </body>
 </html>
