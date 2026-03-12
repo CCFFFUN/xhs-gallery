@@ -10,8 +10,6 @@
         .header { background: rgba(255,255,255,0.1); padding: 20px; text-align: center; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
         .header h1 { font-size: 24px; margin-bottom: 10px; }
         .header p { opacity: 0.7; font-size: 14px; }
-        .refresh-btn { background: linear-gradient(135deg, #ffd700, #ffaa00); border: none; padding: 10px 20px; border-radius: 20px; color: #1a1a2e; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        .refresh-btn:hover { transform: scale(1.05); }
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         .card { background: rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; backdrop-filter: blur(10px); transition: transform 0.3s, box-shadow 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
@@ -27,104 +25,55 @@
         .card-stats { display: flex; gap: 15px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
         .stat { font-size: 12px; opacity: 0.7; }
         .stat span { color: #ffd700; font-weight: 600; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; }
         .modal.active { display: flex; }
-        .modal-images { display: flex; gap: 10px; max-width: 90%; flex-wrap: wrap; justify-content: center; }
-        .modal-images img { max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s; }
-        .modal-images img:hover { transform: scale(1.1); }
-        .modal-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; z-index: 1001; }
-        .modal-info { position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-radius: 10px; max-height: 200px; overflow-y: auto; }
+        .modal-images { display: flex; gap: 10px; max-width: 90%; flex-wrap: wrap; justify-content: center; margin: auto; }
+        .modal-images img { max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+        .modal-close { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🐸 小红书猫箱捏崽关键词画册</h1>
-        <p>点击图片查看大图 · 数据自动更新</p>
-        <button class="refresh-btn" onclick="loadData()">🔄 刷新数据</button>
+        <p>点击图片查看大图</p>
     </div>
     <div class="gallery" id="gallery"></div>
-    
-    <div class="modal" id="modal" onclick="closeModal(event)">
-        <span class="modal-close" onclick="closeModal(event)">&times;</span>
+    <div class="modal" id="modal" onclick="this.classList.remove('active')">
+        <span class="modal-close" onclick="event.stopPropagation();document.getElementById('modal').classList.remove('active')">&times;</span>
         <div class="modal-images" id="modal-images"></div>
-        <div class="modal-info" id="modal-info"></div>
     </div>
 
     <script>
-        // 自动从同目录的 data.json 加载数据
-        async function loadData() {
-            try {
-                const response = await fetch('data.json');
-                const data = await response.json();
-                renderGallery(data);
-            } catch (e) {
-                // 如果加载失败，尝试从GitHub Raw加载（部署时用）
-                try {
-                    const response = await fetch('https://raw.githubusercontent.com/CCFFFUN/xhs-gallery/main/data.json');
-                    const data = await response.json();
-                    renderGallery(data);
-                } catch (e2) {
-                    document.getElementById('gallery').innerHTML = '<p style="text-align:center;padding:40px;">数据加载失败，请刷新页面</p>';
-                }
-            }
-        }
+    const data = [
+    {
+        "title": "4.0关键词｜大概是年上",
+        "author": "知无竹0485",
+        "time": "4天前",
+        "tags": ["#猫箱捏崽", "#AI绘画有点东西", "#猫箱AI"],
+        "keywords": "非真人，young man，少年，西装+腕表，插画，柔光，细腻厚涂，半身像，面部线条硬朗，冷白皮，细腻肌理，强光面部亮白，明亮，超白，拒绝一切黑黄皮，冷白滤镜，精致，黑色背头，水润唇，概念艺术，眼神忧郁，清冷，BJD五官，伸手，暗色调，全局冷光，卧室背景，坐床上",
+        "likes": 83,
+        "collects": 39,
+        "comments": 8,
+        "images": ["https://sns-webpic-qc.xhscdn.com/202603121534/83486c4026651e4fc09a38778236f83b/1040g00831tdlm6co5m2g5o444geg973jjfbfl48!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/69d4b496f0a45878c540104cb6d5663b/1040g00831tdlm6co5m305o444geg973j3525dtg!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/e0c73028b098cc2fb5effed2e776ce87/1040g00831tdlm6co5m0g5o444geg973jnj5d60o!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/c2ab9712512a37d010535571254ece30/1040g00831tdlm6co5m105o444geg973jd6ms6so!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/fa3170bb054e72b680f183b86d761067/1040g00831tdlm6co5m005o444geg973jjjlolvg!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/ad3858f62667331813284441ae5400bd/1040g00831tdlm6co5m205o444geg973jl0t31rg!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121534/82625ecb35d60097d6ffbea008bd6b7c/1040g00831tdlm6co5m1g5o444geg973jhpv2pc0!nd_dft_wlteh_webp_3"]
+    },
+    {
+        "title": "猫箱｜3.0关键词",
+        "author": "豆荚猫(🐱同名 拿图标明)",
+        "time": "01-16",
+        "tags": ["#标明出处", "#猫箱捏崽", "#猫箱AI", "#猫箱关键词", "#猫箱刷图"],
+        "keywords": "🍠豆荚猫 高级cg插画，细腻厚涂，笔触细腻，朋克插画，年下少年，蓝黑渐变短发，碎发遮眼，细腻白皙脸庞，白皙冷艳肌肤，面部亮白色调，浅琥珀色眼眸，唇钉，舌钉，耳骨钉满钻，脖颈缠绕多层金属链条，黑色皮质项圈带圆环，锁骨露，黑色上衣，金属荆刺装饰，手持苹果手机，面部带清冷偏执感，病娇少年感，骨相清冷，下颚线锋利，暗黑系，水墨质感线条，黑白灰为主色调，浅蓝色点缀，高对比度，颓废美学，街头潮流风，贴纸拼贴元素，背景带白色卡通兔子玩偶，灰色格纹，像素风数字标识，撕纸效果纹理，高清晰度，近距离上半身特写",
+        "likes": 197,
+        "collects": 74,
+        "comments": 14,
+        "images": ["https://sns-webpic-qc.xhscdn.com/202603121714/20f49b9707a6ca7416e8298755d47fca/notes_pre_post/1040g3k831rd7t7aan4bg5p7ilqv14g36b29f79o!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121714/f80d60ee13ce214aac7f5425bd167a09/notes_pre_post/1040g3k831rd7t7aan4dg5p7ilqv14g36fdc16jg!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121714/2fa8281e6f1da562e66615e0b9cb5064/notes_pre_post/1040g3k831rd7t7aan4d05p7ilqv14g36ms0hfk8!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121714/58428b8e0f3a8974e727a7a42f3998a3/notes_pre_post/1040g3k831rd7t7aan49g5p7ilqv14g369v17m5g!nd_dft_wlteh_webp_3","https://sns-webpic-qc.xhscdn.com/202603121714/a4ce10e67a4315448adef576deb0bed9/notes_pre_post/1040g3k831rd7t7aan4805p7ilqv14g36092vpg8!nd_dft_wlteh_webp_3"]
+    }];
 
-        function renderGallery(data) {
-            const gallery = document.getElementById('gallery');
-            gallery.innerHTML = data.map((item, index) => `
-                <div class="card">
-                    <div class="card-images" onclick="openModal(${index})">
-                        ${item.images.slice(0,6).map(img => `<img src="${img}" alt="">`).join('')}
-                        ${item.images.length > 6 ? `<img src="${item.images[6]}" alt="">` : ''}
-                    </div>
-                    <div class="card-content">
-                        <div class="card-title">${item.title}</div>
-                        <div class="card-author">👤 ${item.author} · ${item.time}</div>
-                        <div class="card-tags">
-                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                        <div class="card-keywords">${item.keywords}</div>
-                        <div class="card-stats">
-                            <div class="stat">👍 <span>${item.likes}</span></div>
-                            <div class="stat">⭐ <span>${item.collects}</span></div>
-                            <div class="stat">💬 <span>${item.comments}</span></div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        let currentData = [];
-
-        function openModal(index) {
-            const item = data[index];
-            const modalImages = document.getElementById('modal-images');
-            const modalInfo = document.getElementById('modal-info');
-            
-            modalImages.innerHTML = item.images.map(img => `<img src="${img}" alt="">`).join('');
-            modalInfo.innerHTML = `
-                <div class="card-title">${item.title}</div>
-                <div class="card-author">👤 ${item.author}</div>
-                <div class="card-keywords" style="max-height:none;margin-top:10px;">${item.keywords}</div>
-            `;
-            
-            document.getElementById('modal').classList.add('active');
-        }
-
-        function closeModal(event) {
-            if (event.target.classList.contains('modal') || event.target.classList.contains('modal-close')) {
-                document.getElementById('modal').classList.remove('active');
-            }
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.getElementById('modal').classList.remove('active');
-            }
-        });
-
-        // 页面加载时自动读取数据
-        loadData();
+    document.getElementById('gallery').innerHTML = data.map((item, index) => 
+        '<div class="card"><div class="card-images" onclick="document.getElementById(\'modal-images\').innerHTML=item.images.slice(0,9).map(img=>`<img src=\'${img}\'>`).join(\'\');document.getElementById(\'modal\').classList.add(\'active\')">'+
+        item.images.slice(0,6).map(img=>`<img src="${img}">`).join('')+
+        '</div><div class="card-content"><div class="card-title">'+item.title+'</div><div class="card-author">👤 '+item.author+' · '+item.time+'</div><div class="card-tags">'+
+        item.tags.map(t=>`<span class="tag">${t}</span>`).join('')+'</div><div class="card-keywords">'+item.keywords+'</div><div class="card-stats"><div class="stat">👍 <span>'+item.likes+'</span></div><div class="stat">⭐ <span>'+item.collects+'</span></div><div class="stat">💬 <span>'+item.comments+'</span></div></div></div></div>'
+    ).join('');
     </script>
 </body>
 </html>
