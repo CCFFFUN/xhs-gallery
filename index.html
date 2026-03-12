@@ -60,7 +60,7 @@
             } catch (e) {
                 // 如果加载失败，尝试从GitHub Raw加载（部署时用）
                 try {
-                    const response = await fetch('https://raw.githubusercontent.com/YOUR_GITHUB/xhs-gallery/main/data.json');
+                    const response = await fetch('https://raw.githubusercontent.com/CCFFFUN/xhs-gallery/main/data.json');
                     const data = await response.json();
                     renderGallery(data);
                 } catch (e2) {
