@@ -8,10 +8,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; color: #fff; }
         .header { background: rgba(255,255,255,0.1); padding: 20px; text-align: center; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; padding: 20px; max-width: 1500px; margin: 0 auto; }
         .card { background: rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; }
         .card-images { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 10px; background: rgba(0,0,0,0.2); }
         .card-images img { width: 100%; height: 100px; object-fit: cover; border-radius: 6px; cursor: pointer; }
+        .card-content { padding: 15px; }
+        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #ffd700; }
+        .card-author { font-size: 12px; opacity: 0.7; margin-bottom: 10px; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+        .tag { background: rgba(255,215,0,0.2); color: #ffd700; padding: 3px 8px; border-radius: 10px; font-size: 10px; }
+        .keywords { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-size: 11px; line-height: 1.6; max-height: 120px; overflow: auto; margin-bottom: 10px; }
+        .keywords-label { color: #ffd700; font-weight: 600; margin-bottom: 5px; }
+        .stats { display: flex; gap: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; opacity: 0.7; }
+        .stats span { color: #ffd700; font-weight: 600; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 40px; flex-wrap: wrap; justify-content: center; align-content: center; gap: 10px; overflow: auto; }
         .modal.show { display: flex; }
         .modal img { max-width: 250px; max-height: 350px; object-fit: contain; border-radius: 8px; }
@@ -19,7 +28,7 @@
     </style>
 </head>
 <body>
-    <div class="header"><h1>🐸 小红书猫箱画册</h1></div>
+    <div class="header"><h1>🐸 小红书猫箱画册 - 关键词分析</h1></div>
     <div class="gallery" id="gallery"></div>
     <div class="modal" id="modal" onclick="document.getElementById('modal').classList.remove('show')">
         <span class="modal-close" onclick="document.getElementById('modal').classList.remove('show')">&times;</span>
@@ -28,12 +37,12 @@
     <script>
     const base = "https://cdn.jsdelivr.net/gh/CCFFFUN/xhs-gallery@main/images/";
     const data = [
-    {title: "4.0关键词｜大概是年上", author: "知无竹0485", time: "4天前", tags: ["#猫箱捏崽","#AI绘画有点东西","#猫箱AI"], likes: 83, collects: 39, images: ["img1_1.jpg","img1_2.jpg","img1_3.jpg","img1_4.jpg","img1_5.jpg","img1_6.jpg","img1_7.jpg"]},
-    {title: "猫箱｜3.0关键词", author: "豆荚猫", time: "01-16", tags: ["#猫箱捏崽","#猫箱AI"], likes: 197, collects: 74, images: ["img2_1.jpg","img2_2.jpg","img2_3.jpg","img2_4.jpg","img2_5.jpg"]},
-    {title: "词条分享｜油画质感", author: "momo", time: "2025-10-18", tags: ["#AI画图","#ai","#猫箱","#猫箱AI"], likes: 23, collects: 13, images: ["img3_1.jpg","img3_2.jpg","img3_3.jpg","img3_4.jpg"]}
+    {title: "4.0关键词｜大概是年上", author: "知无竹0485", time: "4天前", tags: ["#猫箱捏崽","#AI绘画有点东西","#猫箱AI"], likes: 83, collects: 39, keywords: "非真人，young man，少年，西装+腕表，插画，柔光，细腻厚涂，半身像，面部线条硬朗，冷白皮，细腻肌理，强光面部亮白，明亮，超白，拒绝一切黑黄皮，冷白滤镜，精致，黑色背头，水润唇，概念艺术，眼神忧郁，清冷，BJD五官，伸手，暗色调，全局冷光，卧室背景，坐床上", images: ["img1_1.jpg","img1_2.jpg","img1_3.jpg","img1_4.jpg","img1_5.jpg","img1_6.jpg","img1_7.jpg"]},
+    {title: "猫箱｜3.0关键词", author: "豆荚猫", time: "01-16", tags: ["#猫箱捏崽","#猫箱AI"], likes: 197, collects: 74, keywords: "高级cg插画，细腻厚涂，笔触细腻，朋克插画，年下少年，蓝黑渐变短发，碎发遮眼，细腻白皙脸庞，白皙冷艳肌肤，面部亮白色调，浅琥珀色眼眸，唇钉，舌钉，耳骨钉满钻，脖颈缠绕多层金属链条，黑色皮质项圈带圆环，锁骨露，黑色上衣，金属荆刺装饰，手持苹果手机，面部带清冷偏执感，病娇少年感，骨相清冷，下颚线锋利，暗黑系，水墨质感线条，黑白灰为主色调，浅蓝色点缀，高对比度，颓废美学，街头潮流风", images: ["img2_1.jpg","img2_2.jpg","img2_3.jpg","img2_4.jpg","img2_5.jpg"]},
+    {title: "词条分享｜油画质感", author: "momo", time: "2025-10-18", tags: ["#AI画图","#ai","#猫箱","#猫箱AI"], likes: 23, collects: 13, keywords: "油画质感，超绝cg插画，插画，厚涂，漫画，面部特写。男，手捂住下半张脸，蓬松慵懒中长发卷发，精致衣服带有粗糙笔触，精致华丽笔触，面部精致，眼带着朦胧模糊的光，躺在银蓝色花海，嫩绿色枝条，矜贵优雅，清冷厌世感，面容清冷干净，色调偏暗，油画，暗光哑光，朦胧模糊，迷蒙缥缈，低饱和度，环境压暗，有笔触，粗糙笔触质感，强烈油画笔触，厚涂", images: ["img3_1.jpg","img3_2.jpg","img3_3.jpg","img3_4.jpg"]}
     ];
     function showImages(idx){var imgs=data[idx].images;document.getElementById('modal-images').innerHTML=imgs.map(i=>`<img src="${base}${i}">`).join('');document.getElementById('modal').classList.add('show');}
-    document.getElementById('gallery').innerHTML=data.map(function(d,i){return'<div class="card"><div class="card-images">'+d.images.slice(0,6).map(function(img){return'<img src="'+base+img+'" onclick="showImages('+i+')">';}).join('')+'</div><div class="card-content"><div class="card-title">'+d.title+'</div><div class="card-author">👤 '+d.author+' · '+d.time+'</div><div class="card-tags">'+d.tags.map(function(t){return'<span style="background:rgba(255,215,0,0.2);color:#ffd700;padding:4px 10px;border-radius:12px;font-size:11px;margin-right:5px;">'+t+'</span>';}).join('')+'</div><div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;opacity:0.7;">👍 <span style="color:#ffd700;font-weight:600;">'+d.likes+'</span> &nbsp;⭐ <span style="color:#ffd700;font-weight:600;">'+d.collects+'</span></div></div></div>';}).join('');
+    document.getElementById('gallery').innerHTML=data.map(function(d,i){return'<div class="card"><div class="card-images">'+d.images.slice(0,6).map(function(img){return'<img src="'+base+img+'" onclick="showImages('+i+')">';}).join('')+'</div><div class="card-content"><div class="card-title">'+d.title+'</div><div class="card-author">👤 '+d.author+' · '+d.time+'</div><div class="card-tags">'+d.tags.map(function(t){return'<span class="tag">'+t+'</span>';}).join('')+'</div><div class="keywords"><div class="keywords-label">📝 关键词：</div>'+d.keywords+'</div><div class="stats">👍 <span>'+d.likes+'</span> &nbsp;⭐ <span>'+d.collects+'</span></div></div></div>';}).join('');
     </script>
 </body>
 </html>
