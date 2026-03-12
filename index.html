@@ -29,10 +29,10 @@
     const base = "https://cdn.jsdelivr.net/gh/CCFFFUN/xhs-gallery@main/images/";
     const data = [
     {title: "4.0关键词｜大概是年上", author: "知无竹0485", time: "4天前", tags: ["#猫箱捏崽","#AI绘画有点东西","#猫箱AI"], likes: 83, collects: 39, images: ["img1_1.jpg","img1_2.jpg","img1_3.jpg","img1_4.jpg","img1_5.jpg","img1_6.jpg","img1_7.jpg"]},
-    {title: "猫箱｜3.0关键词", author: "豆荚猫", time: "01-16", tags: ["#猫箱捏崽","#猫箱AI"], likes: 197, collects: 74, images: ["img2_1.jpg","img2_2.jpg","img2_3.jpg","img2_4.jpg","img2_5.jpg"]}
+    {title: "猫箱｜3.0关键词", author: "豆荚猫", time: "01-16", tags: ["#猫箱捏崽","#猫箱AI"], likes: 197, collects: 74, images: ["img2_1.jpg","img2_2.jpg","img2_3.jpg","img2_4.jpg","img2_5.jpg"]},
+    {title: "词条分享｜油画质感", author: "momo", time: "2025-10-18", tags: ["#AI画图","#ai","#猫箱","#猫箱AI"], likes: 23, collects: 13, images: ["img3_1.jpg","img3_2.jpg","img3_3.jpg","img3_4.jpg"]}
     ];
-    var currentData = data;
-    function showImages(idx){var imgs=currentData[idx].images;document.getElementById('modal-images').innerHTML=imgs.map(i=>`<img src="${base}${i}">`).join('');document.getElementById('modal').classList.add('show');}
+    function showImages(idx){var imgs=data[idx].images;document.getElementById('modal-images').innerHTML=imgs.map(i=>`<img src="${base}${i}">`).join('');document.getElementById('modal').classList.add('show');}
     document.getElementById('gallery').innerHTML=data.map(function(d,i){return'<div class="card"><div class="card-images">'+d.images.slice(0,6).map(function(img){return'<img src="'+base+img+'" onclick="showImages('+i+')">';}).join('')+'</div><div class="card-content"><div class="card-title">'+d.title+'</div><div class="card-author">👤 '+d.author+' · '+d.time+'</div><div class="card-tags">'+d.tags.map(function(t){return'<span style="background:rgba(255,215,0,0.2);color:#ffd700;padding:4px 10px;border-radius:12px;font-size:11px;margin-right:5px;">'+t+'</span>';}).join('')+'</div><div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;opacity:0.7;">👍 <span style="color:#ffd700;font-weight:600;">'+d.likes+'</span> &nbsp;⭐ <span style="color:#ffd700;font-weight:600;">'+d.collects+'</span></div></div></div>';}).join('');
     </script>
 </body>
